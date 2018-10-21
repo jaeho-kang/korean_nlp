@@ -5,6 +5,8 @@ import lxml.html
 import lxml.etree as etree
 from Comment import MovieComment
 import datetime
+from time import sleep
+from tqdm import tqdm, trange
 
 def elements2list(elements, mc_list):
     for idx, element in enumerate(elements) :
@@ -46,20 +48,16 @@ def get_naver_comment_element(idx):
     comment_file_pt.close()
 
 
-
-from time import sleep
-from tqdm import tqdm, trange
-
 def do_process(args):
     for i in tqdm(range(args.begin, args.end)):
         get_naver_comment_element(i)
-        sleep(10)
+        sleep(args.delay)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("begin", type=int, default=0, help="begin number of naver comment index")
-    parser.add_argument("end", type=int, default=10, help="end number of naver commment index")
-    # parser.add_argument("step", type=int, help="how many element to save")
+    parser.add_argument("begin", type=int,  default=0, help="begin number of naver comment index")
+    parser.add_argument("end", type=int,    default=10, help="end number of naver commment index")
+    parser.add_argument("--delay", type=int,  default=10, help="how many element to save")
     args = parser.parse_args()
     do_process(args)
